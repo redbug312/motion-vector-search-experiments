@@ -6,9 +6,9 @@ LDFLAGS := -lm
 
 OUT    := bin
 EXEC   := $(OUT)/hw2
-OBJS   := src/hw2.o
+OBJS   := src/hw2.o src/frame.o
 
-src/%.o: src/%.c
+src/%.o: src/%.c src/%.h
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 $(EXEC): $(OBJS)

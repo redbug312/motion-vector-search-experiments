@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include <math.h>
 
+#include "frame.h"
+
 #if __GNUC__ < 3
 #define __builtin_expect(x, n) (x)
 #endif
@@ -10,33 +12,6 @@
 #define likely(x)   __builtin_expect(!!(x),1)
 #define unlikely(x) __builtin_expect(!!(x),0)
 
-typedef struct Frame {
-    uint8_t *raw;
-    uint8_t *pixels[3];
-    size_t width, height, stride;
-} Frame;
-
-void create_frame(Frame *frame, size_t width, size_t height) {
-    frame->raw       = malloc(sizeof(uint8_t) * width * height * 1.5);
-    frame->pixels[0] = frame->raw;
-    frame->pixels[1] = frame->raw + width * height;
-    frame->pixels[2] = frame->raw + ((width * height * 5) >> 2);
-    frame->width     = width;
-    frame->height    = height;
-    frame->stride    = width;
-}
-
-void destroy_frame(Frame *frame) {
-    free(frame->raw);
-}
-
-inline int read_into_frame(Frame *frame, FILE *fptr) {
-    return fread(frame->raw, 1, frame->width * frame->height * 1.5, fptr);
-}
-
-inline const uint8_t *get_image_at_pos(Frame *frame, int cIdx, int xpos, int ypos) {
-    return frame->pixels[cIdx] + (xpos + ypos * frame->stride) * sizeof(uint8_t);
-}
 
 double PSNR(Frame *frameA, Frame *frameB) {
     uint8_t *pA = frameA->pixels[0], *pB = frameB->pixels[0];
