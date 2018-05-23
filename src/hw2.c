@@ -50,12 +50,11 @@ int main(int argc, char *argv[]) {
         for (int mbx = 0; mbx < width >> mb_size_log2; mbx++)
             for (int mby = 0; mby < height >> mb_size_log2; mby++) {
                 MotionVector mv = MVSearch(&frame[prev], &frame[curr],
-                                           mbx << mb_size_log2,
-                                           mby << mb_size_log2,
-                                           &ThreeStepSearch);
+                                           mbx << mb_size_log2, mby << mb_size_log2,
+                                           &NoSearch);
+                                           /* &ThreeStepSearch); */
                 sse += SSE(&frame[prev], &frame[curr],
-                           mbx << mb_size_log2,
-                           mby << mb_size_log2, mv);
+                           mbx << mb_size_log2, mby << mb_size_log2, mv);
         }
 
         double mse = (double) sse / width / height;

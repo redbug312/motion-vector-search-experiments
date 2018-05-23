@@ -1,0 +1,13 @@
+#!/usr/bin/env gnuplot
+set title 'Motion Vector Search Algorithms under Video '.ARG1 tc rgb '#222222'
+set xlabel 'Frames' tc rgb '#222222'
+set ylabel 'PSNR (dB)' tc rgb '#222222'
+set key right bottom tc rgb '#222222'
+set border lc rgb '#222222'
+
+set terminal png font 'Ubuntu'
+set output 'doc/plot/png/'.ARG1.'.png'
+
+plot \
+'doc/plot/log/PSNR_'.ARG1.'_no.log' using 2:4 with filledcurves above y1=0 lc rgb '#EEEEEEEE', \
+'doc/plot/log/PSNR_'.ARG1.'_threestep.log' using 2:4 with lines title 'Three Step Search'

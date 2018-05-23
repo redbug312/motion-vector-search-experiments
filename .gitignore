@@ -1,5 +1,6 @@
 .gdb_history
 tags
 bin/
+*.png
 *.log
 *.o
