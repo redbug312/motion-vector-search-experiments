@@ -7,18 +7,19 @@
 #include "search.h"
 
 int SSE(Frame *ref_frame, Frame *frame, int xpos, int ypos, MotionVector mv) {
-    const uint8_t *pA = get_image_at_pos(ref_frame, 0, xpos + mv.x, ypos + mv.y);
-    const uint8_t *pB = get_image_at_pos(frame, 0, xpos, ypos);
+    const uint8_t *pA = get_frame_at_pos(ref_frame, 0, xpos + mv.x, ypos + mv.y);
+    const uint8_t *pB = get_frame_at_pos(frame, 0, xpos, ypos);
+    int mb_size = 1 << frame->mb_size_log2;
 
     int sse = 0;
-    for (int y = 0; y < 8; y++) {
-        for (int x = 0; x < 8; x++) {
+    for (int y = 0; y < mb_size; y++) {
+        for (int x = 0; x < mb_size; x++) {
             sse += abs(*pA - *pB) * abs(*pA - *pB);
             pA++;
             pB++;
         }
-        pA += ref_frame->stride - 8;
-        pB += ref_frame->stride - 8;
+        pA += ref_frame->stride - mb_size;
+        pB += ref_frame->stride - mb_size;
     }
     return sse;
 }
@@ -29,7 +30,7 @@ double PSNR(double mse) {
 
 int main(int argc, char *argv[]) {
     size_t width = 352, height = 288;
-    FILE *fptr = fopen("data/Foreman.CIF", "rb");
+    FILE *fptr = fopen("data/Stefan.CIF", "rb");
 
     Frame frame[2];
     create_frame(&frame[0], width, height);
@@ -44,11 +45,16 @@ int main(int argc, char *argv[]) {
 
         read_into_frame(&frame[curr], fptr);
 
-        int sse = 0;
-        for (int mbx = 0; mbx < width>>3; mbx++)
-            for (int mby = 0; mby < height>>3; mby++) {
-                MotionVector mv = MVSearch(&frame[prev], &frame[curr], mbx<<3, mby<<3, &ThreeStepSearch);
-                sse += SSE(&frame[prev], &frame[curr], mbx<<3, mby<<3, mv);
+        uint64_t sse = 0;  // 2**32 < 255*255*352*288*300 < 2**64
+        for (int mbx = 0; mbx < width >> frame[curr].mb_size_log2; mbx++)
+            for (int mby = 0; mby < height >> frame[curr].mb_size_log2; mby++) {
+                MotionVector mv = MVSearch(&frame[prev], &frame[curr],
+                                           mbx << frame[curr].mb_size_log2,
+                                           mby << frame[curr].mb_size_log2,
+                                           &ThreeStepSearch);
+                sse += SSE(&frame[prev], &frame[curr],
+                           mbx << frame[curr].mb_size_log2,
+                           mby << frame[curr].mb_size_log2, mv);
         }
 
         double mse = (double) sse / width / height;
