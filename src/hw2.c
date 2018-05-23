@@ -30,7 +30,7 @@ double PSNR(double mse) {
 
 int main(int argc, char *argv[]) {
     size_t width = 352, height = 288;
-    FILE *fptr = fopen("data/Stefan.CIF", "rb");
+    FILE *fptr = fopen("data/Foreman.CIF", "rb");
 
     Frame frame[2];
     create_frame(&frame[0], width, height);
@@ -38,6 +38,7 @@ int main(int argc, char *argv[]) {
 
     // unloop fi = 0 to avoid if-else branching
     read_into_frame(&frame[0], fptr);
+    int mb_size_log2 = frame[0].mb_size_log2;
 
     for (int fi = 1; fi < 300; fi++) {
         int curr = fi & 0x1;
@@ -46,15 +47,15 @@ int main(int argc, char *argv[]) {
         read_into_frame(&frame[curr], fptr);
 
         uint64_t sse = 0;  // 2**32 < 255*255*352*288*300 < 2**64
-        for (int mbx = 0; mbx < width >> frame[curr].mb_size_log2; mbx++)
-            for (int mby = 0; mby < height >> frame[curr].mb_size_log2; mby++) {
+        for (int mbx = 0; mbx < width >> mb_size_log2; mbx++)
+            for (int mby = 0; mby < height >> mb_size_log2; mby++) {
                 MotionVector mv = MVSearch(&frame[prev], &frame[curr],
-                                           mbx << frame[curr].mb_size_log2,
-                                           mby << frame[curr].mb_size_log2,
+                                           mbx << mb_size_log2,
+                                           mby << mb_size_log2,
                                            &ThreeStepSearch);
                 sse += SSE(&frame[prev], &frame[curr],
-                           mbx << frame[curr].mb_size_log2,
-                           mby << frame[curr].mb_size_log2, mv);
+                           mbx << mb_size_log2,
+                           mby << mb_size_log2, mv);
         }
 
         double mse = (double) sse / width / height;

@@ -9,6 +9,7 @@ EXEC   := $(OUT)/hw2
 OBJS   := src/hw2.o\
 		  src/frame.o\
 		  src/search.o\
+		  src/algorithms/no_search.o\
 		  src/algorithms/three_step_search.o
 
 src/%.o: src/%.c include/%.h

@@ -19,6 +19,7 @@ typedef struct MotionVector {
     int y;
 } MotionVector;
 
+// Ugly but lead to high performance generator
 typedef struct SearchStatus {
     int distance;
     MotionVector origin;
@@ -29,11 +30,11 @@ typedef int (*IterNextCandidate)(MotionVector*, MotionVector*, int, SearchStatus
 typedef SearchStatus (*InitSearchStatus)();
 
 typedef struct MVSearchAlgo {
-    int search_range;
     IterNextCandidate iter_next_candidate;
     InitSearchStatus init_search_status;
 } MVSearchAlgo;
 
+MVSearchAlgo NoSearch;
 MVSearchAlgo ThreeStepSearch;
 
 MotionVector MVSearch(Frame *ref_frame, Frame *frame, int xpos, int ypos, MVSearchAlgo *algo);
