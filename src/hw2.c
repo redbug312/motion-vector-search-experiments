@@ -4,28 +4,27 @@
 #include <math.h>
 
 #include "frame.h"
+#include "search.h"
 
-#if __GNUC__ < 3
-#define __builtin_expect(x, n) (x)
-#endif
+int SSE(Frame *ref_frame, Frame *frame, int xpos, int ypos, MotionVector mv) {
+    const uint8_t *pA = get_image_at_pos(ref_frame, 0, xpos + mv.x, ypos + mv.y);
+    const uint8_t *pB = get_image_at_pos(frame, 0, xpos, ypos);
 
-#define likely(x)   __builtin_expect(!!(x),1)
-#define unlikely(x) __builtin_expect(!!(x),0)
-
-
-double PSNR(Frame *frameA, Frame *frameB) {
-    uint8_t *pA = frameA->pixels[0], *pB = frameB->pixels[0];
-    size_t width = frameA->width;
-    size_t height = frameA->height;
-
-    int MSE = 0, diff;
-    for (int y = 0; y < height; y++)
-        for (int x = 0; x < width; x++, pA++, pB++) {
-            diff = abs(*pA - *pB);
-            MSE += diff * diff;
+    int sse = 0;
+    for (int y = 0; y < 8; y++) {
+        for (int x = 0; x < 8; x++) {
+            sse += abs(*pA - *pB) * abs(*pA - *pB);
+            pA++;
+            pB++;
+        }
+        pA += ref_frame->stride - 8;
+        pB += ref_frame->stride - 8;
     }
-    MSE /= (double) width * height;
-    return 10 * log10(255.0 * 255.0 / MSE);
+    return sse;
+}
+
+double PSNR(double mse) {
+    return 10 * log10(255.0 * 255.0 / mse);
 }
 
 int main(int argc, char *argv[]) {
@@ -36,15 +35,24 @@ int main(int argc, char *argv[]) {
     create_frame(&frame[0], width, height);
     create_frame(&frame[1], width, height);
 
-    for (int fi = 0; fi < 300; fi++) {
+    // unloop fi = 0 to avoid if-else branching
+    read_into_frame(&frame[0], fptr);
+
+    for (int fi = 1; fi < 300; fi++) {
         int curr = fi & 0x1;
         int prev = curr ^ 0x1;
 
         read_into_frame(&frame[curr], fptr);
 
-        if (likely(fi)) {
-            printf("Frame: %d\tPSNR: %f\n", fi, PSNR(&frame[0], &frame[1]));
+        int sse = 0;
+        for (int mbx = 0; mbx < width>>3; mbx++)
+            for (int mby = 0; mby < height>>3; mby++) {
+                MotionVector mv = MVSearch(&frame[prev], &frame[curr], mbx<<3, mby<<3, &ThreeStepSearch);
+                sse += SSE(&frame[prev], &frame[curr], mbx<<3, mby<<3, mv);
         }
+
+        double mse = (double) sse / width / height;
+        printf("frame: %d\tPSNR: %f\n", fi, PSNR(mse));
     }
 
     destroy_frame(&frame[0]);
