@@ -26,8 +26,8 @@ MotionVector MVSearch(Frame *ref_frame, Frame *frame, int xpos, int ypos, MVSear
 
     while (algo->iter_next_candidate(prevMV, currMV, prev_cost > curr_cost, &status)) {
         prev_cost = prev_cost > curr_cost ? curr_cost : prev_cost;
-        if (likely(xpos + currMV->x >= 0 && xpos + currMV->x + mb_size < ref_frame->width &&
-                   ypos + currMV->y >= 0 && ypos + currMV->y + mb_size < ref_frame->height)) {
+        if (likely(xpos + currMV->x >= 0 && xpos + currMV->x + mb_size <= ref_frame->width &&
+                   ypos + currMV->y >= 0 && ypos + currMV->y + mb_size <= ref_frame->height)) {
             curr_cost = SAD(get_frame_at_pos(ref_frame, 0, xpos + currMV->x, ypos + currMV->y),
                             get_frame_at_pos(frame, 0, xpos, ypos), frame->stride, mb_size);
         }
