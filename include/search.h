@@ -33,6 +33,6 @@ typedef struct MVSearchAlgo {
 MVSearchAlgo NoSearch;
 MVSearchAlgo ThreeStepSearch;
 
-MotionVector MVSearch(Frame *ref_frame, Frame *frame, int xpos, int ypos, MVSearchAlgo *algo);
+MotionVector MVSearch(Frame *ref_frame, Frame *frame, int xpos, int ypos, const MVSearchAlgo *algo);
 
 #endif

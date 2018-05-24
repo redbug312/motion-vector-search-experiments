@@ -33,7 +33,7 @@ double PSNR(double mse) {
 int main(int argc, char *argv[]) {
     FILE *fptr = NULL;
     size_t width, height;
-    MVSearchAlgo *search;
+    const MVSearchAlgo *search;
 
     int optkey; char *optval[2] = { "CIF", "no" };
     while ((optkey = getopt(argc, argv, "f:s:")) != -1) {
