@@ -1,6 +1,8 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
+#include <stdbool.h>
+
 #include "frame.h"
 
 #ifndef likely
@@ -11,23 +13,17 @@
 #define unlikely(x) __builtin_expect(!!(x),0)
 #endif
 
-#define MV(x0,y0)                   ((MotionVector){.x=x0,.y=y0})
-#define assignMV(v,x0,y0)           do{(v)->x=(x0);(v)->y=(y0);}while(0)
+#define MV(x0,y0)           ((MotionVector){.x=x0,.y=y0})
+#define assignMV(v,x0,y0)   do{(v)->x=(x0);(v)->y=(y0);}while(0)
 
 typedef struct MotionVector {
     int x;
     int y;
 } MotionVector;
 
-// Ugly but lead to high performance generator
-typedef struct SearchStatus {
-    int distance;
-    MotionVector origin;
-    const MotionVector *candidate;
-} SearchStatus;
-
-typedef int (*IterNextCandidate)(MotionVector*, MotionVector*, int, SearchStatus*);
-typedef SearchStatus (*InitSearchStatus)();
+// Return if there's more candidates to examine
+typedef bool (*IterNextCandidate)(MotionVector*, MotionVector*, bool);
+typedef void (*InitSearchStatus)();
 
 typedef struct MVSearchAlgo {
     IterNextCandidate iter_next_candidate;

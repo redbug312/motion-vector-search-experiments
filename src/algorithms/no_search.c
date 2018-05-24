@@ -1,11 +1,11 @@
 #include "search.h"
 
-int NoSearch_iter(MotionVector *prevMV, MotionVector *currMV, int better, SearchStatus *status) {
-    return 0;
+bool NoSearch_iter(MotionVector *prevMV, MotionVector *currMV, bool better) {
+    return false;
 }
 
-SearchStatus NoSearch_init() {
-    return (SearchStatus) {0, MV(0, 0), NULL};
+void NoSearch_init() {
+    return;
 }
 
 MVSearchAlgo NoSearch = {

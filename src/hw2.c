@@ -36,13 +36,13 @@ int main(int argc, char *argv[]) {
     MVSearchAlgo *search;
 
     int optkey; char *optval[2] = { "CIF", "no" };
-    /* while ((optkey = getopt(argc, argv, "f:s:")) != -1) { */
-    /*     switch (optkey) { */
-    /*         case 'f': optval[0] = optarg; break;   // video format: [CIF/QCIF] */
-    /*         case 's': optval[1] = optarg; break;   // motion vector searching algorithm */
-    /*         case '?': fprintf(stderr, "Unknown options or no argument given."); */
-    /*     } */
-    /* } */
+    while ((optkey = getopt(argc, argv, "f:s:")) != -1) {
+        switch (optkey) {
+            case 'f': optval[0] = optarg; break;   // video format: [CIF/QCIF]
+            case 's': optval[1] = optarg; break;   // motion vector searching algorithm
+            case '?': fprintf(stderr, "Unknown options or no argument given.");
+        }
+    }
 
     if (argv[optind]) {
         fptr = fopen(argv[optind], "rb");

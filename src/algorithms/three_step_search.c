@@ -6,24 +6,31 @@ const MotionVector ThreeStepSearch_list[] =
       MV(-1,  0), MV(0,  0), MV(1,  0),
       MV(-1,  1), MV(0,  1), MV(1,  1), };
 
-int ThreeStepSearch_iter(MotionVector *prevMV, MotionVector *currMV, int better, SearchStatus *status) {
+// Status to stored between each calls of iter()
+static int step;
+static MotionVector origin;
+static const MotionVector *candidate;
+
+bool ThreeStepSearch_iter(MotionVector *prevMV, MotionVector *currMV, bool better) {
     MotionVector *bestMV = better ? currMV : prevMV;
 
-    status->candidate++;
-    if (unlikely(status->candidate == ThreeStepSearch_list + candidate_count)) {
-        status->distance >>= 1;
-        status->candidate = ThreeStepSearch_list;
-        assignMV(&status->origin, bestMV->x, bestMV->y);
+    candidate++;
+    if (unlikely(candidate == ThreeStepSearch_list + candidate_count)) {
+        step >>= 1;
+        candidate = ThreeStepSearch_list;
+        assignMV(&origin, bestMV->x, bestMV->y);
     }
     assignMV(prevMV, bestMV->x, bestMV->y);
-    assignMV(currMV, status->origin.x + status->candidate->x * status->distance,
-                     status->origin.y + status->candidate->y * status->distance);
+    assignMV(currMV, origin.x + candidate->x * step,
+                     origin.y + candidate->y * step);
 
-    return status->distance > 0;
+    return step > 0;
 }
 
-SearchStatus ThreeStepSearch_init() {
-    return (SearchStatus){4, MV(0, 0), ThreeStepSearch_list};
+void ThreeStepSearch_init() {
+    step = 4;
+    origin = MV(0, 0);
+    candidate = ThreeStepSearch_list;
 }
 
 MVSearchAlgo ThreeStepSearch = {
