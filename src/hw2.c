@@ -56,10 +56,12 @@ int main(int argc, char *argv[]) {
         height = 144;
     } else fprintf(stderr, "Unsupported video format.\n");
 
-    if (!strcmp(optval[1], "three_step")) {
-        search = &ThreeStepSearch;
-    } else if (!strcmp(optval[1], "no")) {
+    if (!strcmp(optval[1], "no")) {
         search = &NoSearch;
+    } else if (!strcmp(optval[1], "three_step")) {
+        search = &ThreeStepSearch;
+    } else if (!strcmp(optval[1], "orthogonal")) {
+        search = &OrthogonalSearch;
     } else fprintf(stderr, "Unsupported searching algorithm.\n");
 
     Frame frame[2];

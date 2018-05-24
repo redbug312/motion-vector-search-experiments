@@ -1,7 +1,7 @@
 #include "search.h"
 
-const size_t candidate_count = 9;
-const MotionVector ThreeStepSearch_list[] = 
+static const size_t candidate_count = 9;
+static const MotionVector ThreeStepSearch_list[] = 
     { MV(-1, -1), MV(0, -1), MV(1, -1),
       MV(-1,  0), MV(0,  0), MV(1,  0),
       MV(-1,  1), MV(0,  1), MV(1,  1), };

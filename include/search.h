@@ -32,6 +32,7 @@ typedef struct MVSearchAlgo {
 
 MVSearchAlgo NoSearch;
 MVSearchAlgo ThreeStepSearch;
+MVSearchAlgo OrthogonalSearch;
 
 MotionVector MVSearch(Frame *ref_frame, Frame *frame, int xpos, int ypos, const MVSearchAlgo *algo);
 

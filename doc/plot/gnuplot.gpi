@@ -10,4 +10,5 @@ set output 'doc/plot/png/'.ARG1.'.png'
 
 plot \
 'doc/plot/log/PSNR_'.ARG1.'_no.log' using 2:4 with filledcurves above y1=0 lc rgb '#EEEEEEEE', \
-'doc/plot/log/PSNR_'.ARG1.'_three_step.log' using 2:4 with lines title 'Three Step Search'
+'doc/plot/log/PSNR_'.ARG1.'_three_step.log' using 2:4 with lines title 'Three Step Search', \
+'doc/plot/log/PSNR_'.ARG1.'_orthogonal.log' using 2:4 with lines title 'Orthogonal Search'
