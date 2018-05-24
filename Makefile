@@ -12,7 +12,8 @@ OBJS   := src/hw2.o \
 		  src/search.o \
 		  src/algorithms/no_search.o \
 		  src/algorithms/three_step_search.o \
-		  src/algorithms/orthogonal_search.o
+		  src/algorithms/orthogonal_search.o \
+		  src/algorithms/gradient_descent_search.o
 
 src/%.o: src/%.c include/%.h
 	$(CC) $(CFLAGS) -o $@ -c $<
@@ -29,7 +30,7 @@ all: $(EXEC)
 
 INPUT  := data/Foreman.CIF
 FORMAT := CIF
-SEARCH := orthogonal
+SEARCH := gradient_descent
 
 build: $(EXEC)
 

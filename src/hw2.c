@@ -62,6 +62,8 @@ int main(int argc, char *argv[]) {
         search = &ThreeStepSearch;
     } else if (!strcmp(optval[1], "orthogonal")) {
         search = &OrthogonalSearch;
+    } else if (!strcmp(optval[1], "gradient_descent")) {
+        search = &GradientDescentSearch;
     } else fprintf(stderr, "Unsupported searching algorithm.\n");
 
     Frame frame[2];
