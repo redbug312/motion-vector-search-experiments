@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <getopt.h>
+#include <string.h>
 #include <math.h>
 
 #include "frame.h"
@@ -29,8 +31,36 @@ double PSNR(double mse) {
 }
 
 int main(int argc, char *argv[]) {
-    size_t width = 352, height = 288;
-    FILE *fptr = fopen("data/Foreman.CIF", "rb");
+    FILE *fptr = NULL;
+    size_t width, height;
+    MVSearchAlgo *search;
+
+    int optkey; char *optval[2] = { "CIF", "no" };
+    /* while ((optkey = getopt(argc, argv, "f:s:")) != -1) { */
+    /*     switch (optkey) { */
+    /*         case 'f': optval[0] = optarg; break;   // video format: [CIF/QCIF] */
+    /*         case 's': optval[1] = optarg; break;   // motion vector searching algorithm */
+    /*         case '?': fprintf(stderr, "Unknown options or no argument given."); */
+    /*     } */
+    /* } */
+
+    if (argv[optind]) {
+        fptr = fopen(argv[optind], "rb");
+    } else fprintf(stderr, "No input raw video file.\n");
+
+    if (!strcmp(optval[0], "CIF")) {
+        width  = 352;
+        height = 288;
+    } else if (!strcmp(optval[0], "QCIF")) {
+        width  = 176;
+        height = 144;
+    } else fprintf(stderr, "Unsupported video format.\n");
+
+    if (!strcmp(optval[1], "three_step")) {
+        search = &ThreeStepSearch;
+    } else if (!strcmp(optval[1], "no")) {
+        search = &NoSearch;
+    } else fprintf(stderr, "Unsupported searching algorithm.\n");
 
     Frame frame[2];
     create_frame(&frame[0], width, height);
@@ -50,9 +80,7 @@ int main(int argc, char *argv[]) {
         for (int mbx = 0; mbx < width >> mb_size_log2; mbx++)
             for (int mby = 0; mby < height >> mb_size_log2; mby++) {
                 MotionVector mv = MVSearch(&frame[prev], &frame[curr],
-                                           mbx << mb_size_log2, mby << mb_size_log2,
-                                           &NoSearch);
-                                           /* &ThreeStepSearch); */
+                                           mbx << mb_size_log2, mby << mb_size_log2, search);
                 sse += SSE(&frame[prev], &frame[curr],
                            mbx << mb_size_log2, mby << mb_size_log2, mv);
         }
@@ -61,6 +89,7 @@ int main(int argc, char *argv[]) {
         printf("frame: %d\tPSNR: %f\n", fi, PSNR(mse));
     }
 
+    fclose(fptr);
     destroy_frame(&frame[0]);
     destroy_frame(&frame[1]);
 }

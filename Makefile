@@ -1,4 +1,5 @@
-.PHONY: build start debug test
+.PHONY: build start debug test plot
+
 
 CC      := gcc
 CFLAGS  := -std=c99 -Wall -g3 -Iinclude
@@ -6,10 +7,10 @@ LDFLAGS := -lm
 
 OUT    := bin
 EXEC   := $(OUT)/hw2
-OBJS   := src/hw2.o\
-		  src/frame.o\
-		  src/search.o\
-		  src/algorithms/no_search.o\
+OBJS   := src/hw2.o \
+		  src/frame.o \
+		  src/search.o \
+		  src/algorithms/no_search.o \
 		  src/algorithms/three_step_search.o
 
 src/%.o: src/%.c include/%.h
@@ -22,14 +23,23 @@ $(EXEC): $(OBJS)
 	mkdir -p $(OUT)
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 
+all: $(EXEC)
+
+
+INPUT  := data/Foreman.CIF
+FORMAT := CIF
+SEARCH := no
+
 build: $(EXEC)
 
 start: $(EXEC)
-	./$(EXEC)
+	./$(EXEC) $(INPUT) -f $(FORMAT) -s $(SEARCH)
 
 debug: $(EXEC)
 	gdb -nh -x $$XDG_CONFIG_HOME/gdb/init $(EXEC)
 
 test: $(EXEC)
-	@time ./$(EXEC) > result.log
-	# diff result.log expect.log
+	@time ./$(EXEC) $(INPUT) -f $(FORMAT) -s $(SEARCH) > /dev/null
+
+plot: $(EXEC) doc/plot/gnuplot.gpi
+	fish doc/plot/plot.fish
