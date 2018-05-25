@@ -14,7 +14,8 @@ OBJS   := src/hw2.o \
 		  src/algorithms/three_step_search.o \
 		  src/algorithms/orthogonal_search.o \
 		  src/algorithms/gradient_descent_search.o \
-		  src/algorithms/cross_search.o
+		  src/algorithms/cross_search.o \
+		  src/algorithms/hexagon_search.o
 
 src/%.o: src/%.c include/%.h
 	$(CC) $(CFLAGS) -o $@ -c $<
@@ -31,7 +32,7 @@ all: $(EXEC)
 
 INPUT  := data/Foreman.CIF
 FORMAT := CIF
-SEARCH := cross
+SEARCH := hexagon
 
 build: $(EXEC)
 

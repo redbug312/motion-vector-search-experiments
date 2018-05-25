@@ -66,6 +66,8 @@ int main(int argc, char *argv[]) {
         search = &GradientDescentSearch;
     } else if (!strcmp(optval[1], "cross")) {
         search = &CrossSearch;
+    } else if (!strcmp(optval[1], "hexagon")) {
+        search = &HexagonSearch;
     } else fprintf(stderr, "Unsupported searching algorithm.\n");
 
     Frame frame[2];

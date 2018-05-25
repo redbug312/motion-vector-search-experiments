@@ -14,3 +14,4 @@ plot \
 'doc/plot/log/PSNR_'.ARG1.'_orthogonal.log' using 2:4 with lines title 'Orthogonal Search', \
 'doc/plot/log/PSNR_'.ARG1.'_gradient_descent.log' using 2:4 with lines title 'BBGD Search', \
 'doc/plot/log/PSNR_'.ARG1.'_cross.log' using 2:4 with lines title 'Cross Search', \
+'doc/plot/log/PSNR_'.ARG1.'_hexagon.log' using 2:4 with lines title 'Hexagon Search'
