@@ -34,6 +34,7 @@ MVSearchAlgo NoSearch;
 MVSearchAlgo ThreeStepSearch;
 MVSearchAlgo OrthogonalSearch;
 MVSearchAlgo GradientDescentSearch;
+MVSearchAlgo CrossSearch;
 
 MotionVector MVSearch(Frame *ref_frame, Frame *frame, int xpos, int ypos, const MVSearchAlgo *algo);
 
