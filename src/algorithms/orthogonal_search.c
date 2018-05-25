@@ -1,9 +1,9 @@
 #include "search.h"
 
-static const size_t candidate_count = 3;
-static const MotionVector OrthogonalSearch_list[][3] =
-    { {MV(-1, 0), MV(0, 0), MV(1, 0)},
-      {MV(0, -1), MV(0, 0), MV(0, 1)}, };
+static const size_t candidate_count = 2;
+static const MotionVector OrthogonalSearch_list[][2] =
+    { {MV(-1, 0), MV(1, 0)},
+      {MV(0, -1), MV(0, 1)}, };
 
 // Status to stored between each calls of iter()
 static int step;

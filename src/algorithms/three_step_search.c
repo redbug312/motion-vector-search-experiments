@@ -1,9 +1,9 @@
 #include "search.h"
 
-static const size_t candidate_count = 9;
+static const size_t candidate_count = 8;
 static const MotionVector ThreeStepSearch_list[] = 
     { MV(-1, -1), MV(0, -1), MV(1, -1),
-      MV(-1,  0), MV(0,  0), MV(1,  0),
+      MV(-1,  0),            MV(1,  0),
       MV(-1,  1), MV(0,  1), MV(1,  1), };
 
 // Status to stored between each calls of iter()
@@ -23,7 +23,6 @@ bool ThreeStepSearch_iter(MotionVector *prevMV, MotionVector *currMV, bool bette
     assignMV(prevMV, bestMV->x, bestMV->y);
     assignMV(currMV, origin.x + candidate->x * step,
                      origin.y + candidate->y * step);
-
     return step > 0;
 }
 

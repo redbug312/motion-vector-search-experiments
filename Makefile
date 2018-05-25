@@ -44,4 +44,4 @@ test: $(EXEC)
 	@time ./$(EXEC) $(INPUT) -f $(FORMAT) -s $(SEARCH) > result.log
 
 plot: $(EXEC) doc/plot/gnuplot.gpi
-	fish doc/plot/plot.fish
+	time fish doc/plot/plot.fish

@@ -20,8 +20,10 @@ int SAD(const uint8_t *ref, const uint8_t *pix, int stride, int mb_size) {
 
 MotionVector MVSearch(Frame *ref_frame, Frame *frame, int xpos, int ypos, const MVSearchAlgo *algo) {
     MotionVector *prevMV = &MV(0, 0), *currMV = &MV(0, 0);
-    int prev_cost = INT_MAX, curr_cost = INT_MAX;
     int mb_size = 1 << frame->mb_size_log2;
+    int prev_cost = INT_MAX;
+    int curr_cost = SAD(get_frame_at_pos(ref_frame, 0, xpos, ypos),
+                        get_frame_at_pos(frame, 0, xpos, ypos), frame->stride, mb_size);
 
     algo->init_search_status();
     while (algo->iter_next_candidate(prevMV, currMV, prev_cost > curr_cost)) {
