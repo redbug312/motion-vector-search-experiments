@@ -32,8 +32,8 @@ double PSNR(double mse) {
 
 int main(int argc, char *argv[]) {
     FILE *fptr = NULL;
-    size_t width, height;
-    const MVSearchAlgo *search;
+    size_t width = 0, height = 0;
+    const MVSearchAlgo *search = NULL;
 
     int optkey; char *optval[2] = { "CIF", "no" };
     while ((optkey = getopt(argc, argv, "f:s:")) != -1) {
@@ -100,4 +100,6 @@ int main(int argc, char *argv[]) {
     fclose(fptr);
     destroy_frame(&frame[0]);
     destroy_frame(&frame[1]);
+
+    return EXIT_SUCCESS;
 }

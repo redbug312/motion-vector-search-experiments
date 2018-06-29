@@ -2,7 +2,7 @@
 
 
 CC      := gcc
-CFLAGS  := -std=c99 -Wall -g3 -Iinclude
+CFLAGS  := -std=c99 -Wall -O2 -Iinclude
 LDFLAGS := -lm
 
 OUT    := bin
@@ -46,4 +46,4 @@ test: $(EXEC)
 	@time ./$(EXEC) $(INPUT) -f $(FORMAT) -s $(SEARCH) > result.log
 
 plot: $(EXEC) doc/plot/gnuplot.gpi
-	time fish doc/plot/plot.fish
+	time fish doc/plot/plot.fish data
