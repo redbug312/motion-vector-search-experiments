@@ -4,6 +4,5 @@ motion_search.pdf
 .gdb_history
 tags
 bin/
-*.png
 *.log
 *.o
