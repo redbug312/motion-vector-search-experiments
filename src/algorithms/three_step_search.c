@@ -15,7 +15,7 @@ bool ThreeStepSearch_iter(MotionVector *prevMV, MotionVector *currMV, bool bette
     MotionVector *bestMV = better ? currMV : prevMV;
 
     candidate++;
-    if (unlikely(candidate == ThreeStepSearch_list + candidate_count)) {
+    if (candidate == ThreeStepSearch_list + candidate_count) {
         step >>= 1;
         candidate = ThreeStepSearch_list;
         assignMV(&origin, bestMV->x, bestMV->y);

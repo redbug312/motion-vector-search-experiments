@@ -21,7 +21,7 @@ bool HexagonSearch_iter(MotionVector *prevMV, MotionVector *currMV, bool better)
 
     // TODO: improve effciency by filtering out used MV
     candidate++;
-    if (unlikely(candidate == HexagonSearch_large_list + candidate_large_count)) {
+    if (candidate == HexagonSearch_large_list + candidate_large_count) {
         candidate = (bestMV->x == origin.x && bestMV->y == origin.y)
             ? HexagonSearch_small_list : HexagonSearch_large_list;
         assignMV(&origin, bestMV->x, bestMV->y);
@@ -29,7 +29,7 @@ bool HexagonSearch_iter(MotionVector *prevMV, MotionVector *currMV, bool better)
     assignMV(prevMV, bestMV->x, bestMV->y);
     // avoid accessing invalid memory HexagonSearch_small_list[4]
     bool ended = candidate == HexagonSearch_small_list + candidate_small_count;
-    if (likely(!ended)) {
+    if (!ended) {
         assignMV(currMV, origin.x + candidate->x,
                          origin.y + candidate->y);
     }

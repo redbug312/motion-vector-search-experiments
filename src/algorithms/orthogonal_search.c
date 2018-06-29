@@ -14,10 +14,10 @@ bool OrthogonalSearch_iter(MotionVector *prevMV, MotionVector *currMV, bool bett
     MotionVector *bestMV = better ? currMV : prevMV;
 
     candidate++;
-    if (unlikely(candidate == OrthogonalSearch_list[0] + candidate_count)) {
+    if (candidate == OrthogonalSearch_list[0] + candidate_count) {
         candidate = OrthogonalSearch_list[1];
         assignMV(&origin, bestMV->x, bestMV->y);
-    } else if (unlikely(candidate == OrthogonalSearch_list[1] + candidate_count)) {
+    } else if (candidate == OrthogonalSearch_list[1] + candidate_count) {
         step >>= 1;
         candidate = OrthogonalSearch_list[0];
         assignMV(&origin, bestMV->x, bestMV->y);

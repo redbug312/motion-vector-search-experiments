@@ -19,7 +19,7 @@ bool CrossSearch_iter(MotionVector *prevMV, MotionVector *currMV, bool better) {
     MotionVector *bestMV = better ? currMV : prevMV;
 
     candidate++;
-    if (unlikely(candidate = CrossSearch_list + candidate_count)) {
+    if (candidate == CrossSearch_list + candidate_count) {
         step >>= 1;
         bool best_TR_BL = bestMV->x - origin.x + bestMV->y - origin.y == 0; // useless when step > 0
         candidate = (step > 0)
@@ -30,9 +30,9 @@ bool CrossSearch_iter(MotionVector *prevMV, MotionVector *currMV, bool better) {
     // avoid accessing invalid memory CrossSearch_final_list[n][4]
     bool ended = candidate == CrossSearch_final_list[0] + candidate_count ||
                  candidate == CrossSearch_final_list[1] + candidate_count;
-    if (likely(!ended)) {
-        assignMV(currMV, origin.x + candidate->x * step,
-                         origin.y + candidate->y * step);
+    if (!ended) {
+        assignMV(currMV, origin.x + candidate->x * (step > 0 ? step : 1),
+                         origin.y + candidate->y * (step > 0 ? step : 1));
     }
     return !ended;
 }

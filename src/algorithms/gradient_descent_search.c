@@ -15,8 +15,8 @@ bool GradientDescentSearch_iter(MotionVector *prevMV, MotionVector *currMV, bool
 
     // TODO: improve effciency by filtering out used MV
     candidate++;
-    if (unlikely(candidate == GradientDescentSearch_list + candidate_count)) {
-        if (unlikely(bestMV->x == origin.x && bestMV->y == origin.y))
+    if (candidate == GradientDescentSearch_list + candidate_count) {
+        if (bestMV->x == origin.x && bestMV->y == origin.y)
             return false;
         candidate = GradientDescentSearch_list;
         assignMV(&origin, bestMV->x, bestMV->y);
