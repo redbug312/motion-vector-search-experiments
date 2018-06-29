@@ -6,7 +6,7 @@ Homework 2 of the course Video Communication (2018 Spring).
 
 The source code is under the `src/` directory, You can do
 ```bash
-make build
+$ make build
 ```
 in terminal to compile the repository.
 
@@ -45,4 +45,4 @@ The generated logs and charts are put in `doc/plot/log` and `doc/plot/png` respe
 ![Motion vector search algorithms under video Stefan](doc/plot/png/Stefan.png)
 ![Motion vector search algorithms under video Table](doc/plot/png/Table.png)
 
-Noted that the greyout area indicates no searching algorithms have applied; that is, all the motion vectors are assumed to be $(0, 0)$. All the searching algorithms are expected to have superior results than merely do nothing.
+Noted that the greyout area indicates no searching algorithms have applied; that is, all the motion vectors are assumed to be (0, 0). All the searching algorithms are expected to have superior results than merely do nothing.
