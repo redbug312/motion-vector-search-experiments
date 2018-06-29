@@ -1,7 +1,9 @@
+doc/report.*
+motion_search.pdf
+
 .gdb_history
 tags
 bin/
-doc/report.*
 *.png
 *.log
 *.o
